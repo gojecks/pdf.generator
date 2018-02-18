@@ -1,0 +1,9 @@
+{
+    "templatesMapping": {
+        "requiredTemplate": ["test"],
+        "requiredData": [{
+            "template": "si",
+            "requireFormularData": true
+        }]
+    }
+}

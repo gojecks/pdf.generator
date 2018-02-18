@@ -1,0 +1,82 @@
+{
+    "header": "headerHandler",
+    "footer": "footerHandler",
+    "pageSize": "A4",
+    "pageMargins": [20, 100, 20, 100],
+    "content": [{
+            "text": "{{my.name}}",
+            "processHelpers": ["@underline"]
+        }, {
+            "text": "textContents",
+            "style": "header",
+            "margin": [0, 3]
+        },
+        {
+            "text": "textContents"
+        },
+        {
+            "text": ["Modify date dynamically with helpers ", "date ", { "text": "@date(2018-02-02)" }],
+            "processHelpers": ["@date"]
+        },
+        {
+            "table": {
+                "body": [
+                    ["Testing Auto @underline(layout)"]
+                ]
+            },
+            "layout": "testLayout",
+            "processHelpers": ["@underline"]
+        },
+        "br",
+        {
+            "text": "textContents",
+            "processHelpers": ["@bold"]
+        },
+        {
+            "table": {
+                "widths": ["*"],
+                "body": ["tableContent"]
+            },
+            "layout": "testLayout",
+            "processHelpers": ["@underline"]
+        }
+    ],
+    "pageBreakBefore": "pageBreakHandler",
+    "styles": {
+        "subMargin": {
+            "margin": [20, 0, 20, 0]
+        },
+        "alignmentAndBoldHeader": {
+            "alignment": "center",
+            "bold": true
+        },
+        "header": {
+            "bold": true,
+            "color": "blue",
+            "fontSize": 11
+        },
+        "premiumTableClass": {
+            "alignment": "center",
+            "margin": [0, 5, 0, 0],
+            "bold": true
+        },
+        "singleHeaderDescription": {
+            "bold": true,
+            "color": "blue",
+            "fontSize": 11,
+            "margin": [0, 40, 0, 0],
+            "alignment": "center"
+        },
+        "coverageTableClass": {
+            "alignment": "center",
+            "bold": true
+        },
+        "mls": {
+            "margin": [5, 0]
+        }
+    },
+    "defaultStyle": {
+        "fontStyle": 9,
+        "alignment": "justify"
+    }
+}

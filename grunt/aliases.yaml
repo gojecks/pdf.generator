@@ -1,0 +1,13 @@
+test:
+  - 'karma'
+default:
+  - 'clean:dist'
+  - 'concat:dist'
+  - 'uglify:dist'
+  - 'copy:copydist'
+  - 'watch'
+prepublish:
+  - 'clean:dist'
+  - 'concat:dist'
+  - 'uglify:dist'
+

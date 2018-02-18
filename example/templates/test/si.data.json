@@ -1,0 +1,61 @@
+{
+    "textContents": {
+        "content": [
+            "{{page.title}}",
+            "{{page.instruction}}",
+            "@bold({{page.break}})"
+        ]
+    },
+    "tableContent": {
+        "content": [
+
+            [
+                [{
+                    "text": "YES ITS WORKING!!"
+                }],
+                [
+                    "Underline text with @underline(@underline)(text to underline)"
+                ],
+                [{
+                    "table": {
+                        "body": [
+                            [{
+                                "stack": [
+                                    "stacked content in a nested @underline(table)"
+                                ]
+                            }]
+                        ]
+                    }
+                }]
+            ]
+        ]
+
+    },
+    "header": {
+        "text": "{{page.header}} @date(2018-04-09, 12452525)",
+        "color": "gray",
+        "fontSize": 8,
+        "processHelpers": ["@date"],
+        "processProp": "text"
+    },
+    "footer": {
+        "content": [{
+            "text": "{{page.footer}} : Supports pageNumbering {{currentPage}} / {{pageCount}}",
+            "color": "blue",
+            "fontSize": 8,
+            "alignment": "center"
+        }]
+
+    },
+    "testLayout": {
+        "content": {
+            "vLineColor": "#cccccc",
+            "hLineColor": "#cccccc",
+            "vLineWidth": 0.5,
+            "hLineWidth": 0.5,
+            "paddingTop": 0,
+            "paddingBottom": 0
+        },
+        "handler": "layoutHandler"
+    }
+}

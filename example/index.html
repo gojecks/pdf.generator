@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+
+<HEAD>
+    <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <META http-equiv="X-UA-Compatible" content="IE=8">
+    <TITLE>PA PDF Generator UI</TITLE>
+    <!-- #include virtual="/convert-pdf-to-html/includes/pdf-to-word-head-tag.htm" -->
+    <META name="generator" content="PDFGENERATOR">
+    <script src="/node_modules/azt-pdfmake/build/pdfmake.min.js" type="text/javascript"></script>
+    <script src="/node_modules/azt-pdfmake/build/vfs_fonts.js" type="text/javascript"></script>
+    <script src="/dist/pdf.generator.js"></script>
+    <script src="pdf.service.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</HEAD>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-static-top"></nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- <pre id="editor" style="height:50vh" class="form-control" contenteditable="true">{ plan:"PA" }</pre> -->
+                <iframe style="width:100%;height:80vh" id="display"></iframe>
+            </div>
+            <div class="col-sm-3 col-sm-offset-9">
+                <button onclick="generatePdf()" class="btn btn-primary pull-right col-sm-12">Generate PDF</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function generatePdf() {
+            var pdf = new pdfService({
+                    name: "test",
+                    replacerData: {
+                        "my.name": "My @underline(name) is @bold(Amit)"
+                    }
+                }, 'templates')
+                .setLocalization({
+                    use: true,
+                    default: "en",
+                    locales: ["en", "zh"],
+                    path: "{{name}}/i18n/"
+                })
+                .handlers('tableContentHandler', function(content) {
+                    content[0][0][0].text = pdf.core.helpers.get('underline')(content[0][0][0].text);
+                    return content[0];
+                })
+                .onError('TemplateError', function(err) {
+                    pdfService.service.pdfTemplateObj.events.broadcast('skip.template');
+                });
+
+
+
+            pdf.core.pdfTemplateObj.helpers.add('@date', function(date) {
+                var regex = /\@date\((.*?)\)+/g,
+                    splt = date.split(regex);
+                if (splt.length === 1) {
+                    return date;
+                }
+
+                splt[1] = new Date(splt[1].split(',')[0]).toLocaleDateString();
+                return splt.join('');
+            });
+
+
+            pdf.core.pdfTemplateObj.helpers.add('@bold', function(date) {
+                var regex = /\@bold\((.*?)\)+/g,
+                    splt = date.split(regex);
+                if (splt.length === 1) {
+                    return date;
+                }
+                console.log("bold", splt[1]);
+
+                return {
+                    text: splt[1],
+                    bold: true
+                };
+            });
+            /**
+             * ignore page check on single templates
+             */
+            pdf
+                .core
+                .ignorePageCheck()
+                .configureFonts(['THBaijam', 'THSarabunNew'])
+                .resolveLocalization(function() {
+                    pdf
+                        .build(function(base64) {
+                            document.querySelector("iframe").src = base64;
+                        })
+                });
+        }
+    </script>
+</BODY>
+
+</HTML>
