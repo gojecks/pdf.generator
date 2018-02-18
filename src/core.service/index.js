@@ -141,32 +141,6 @@
              }
          };
 
-         /**
-          * set underline helper
-          */
-         pTemplateMaker.helpers.add('@underline', function(_str) {
-             var regex = /\@underline\((.*?)\)+/g,
-                 _arr = _str.split(regex),
-                 _match = _str.match(regex),
-                 nArr = new Array(_arr.length);
-             if (_arr.length === 1) {
-                 return _str
-             }
-
-             _arr.forEach(function(str, idx) {
-                 if (_match.some(function(key) { return key.indexOf(str) > -1 })) {
-                     str = ({
-                         text: str,
-                         decoration: 'underline'
-                     })
-                 }
-
-                 nArr[idx] = str
-             })
-
-             return nArr;
-         });
-
 
          pTemplateMaker
              .templateMatcher
