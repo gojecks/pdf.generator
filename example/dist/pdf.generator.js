@@ -1,3 +1,65 @@
+pdfTemplateMaker.prototype.initializeDefaultHelpers = function() {
+    if (pdfTemplateMaker.$$defaultHelpers && typeof pdfTemplateMaker.$$defaultHelpers === 'object') {
+        for (var prop in pdfTemplateMaker.$$defaultHelpers) {
+            this.helpers.add(prop, pdfTemplateMaker.$$defaultHelpers[prop]);
+        }
+    }
+
+    return this;
+};
+
+pdfTemplateMaker.$$defaultHelpers = {
+    "@underline": parserFn({
+        decoration: "underline"
+    }),
+    "@bold": parserFn({
+        bold: true
+    }),
+    "@boldUnderline": parserFn({
+        decoration: "underline",
+        bold: true
+    }),
+    "@italics": parserFn({
+        italics: true
+    }),
+    "@boldItalics": parserFn({
+        italics: true,
+        bold: true
+    }),
+    "@boldItalicsUnderline": parserFn({
+        decoration: "underline",
+        bold: true,
+        italics: true
+    }),
+    "@underlineItalics": parserFn({
+        decoration: "underline",
+        italics: true
+    })
+};
+
+/**
+ * 
+ * @param {*} definition 
+ */
+function parserFn(definition) {
+    return function(parser) {
+        var nArr = new Array(parser.length);
+        parser.input().forEach(function(str, idx) {
+            if (parser.inArray(str)) {
+                var _obj = JSON.parse(JSON.stringify(definition));
+                _obj.text = str;
+                str = _obj;
+                _obj = null;
+            }
+
+            nArr[idx] = str
+        });
+
+        return nArr;
+    }
+}
+
+
 	/**
 	 * PDFTemplateMaker
 	 * created by Gojecks Karl
@@ -34,12 +96,61 @@
 
 	    this.helpers = {
 	        add: function(name, fn) {
-	            _helpers[name] = fn;
+	            if (_helpers.hasOwnProperty(name)) {
+	                throw new Error('Duplicate Helper name(' + name + ')');
+	            }
 
+	            _helpers[name] = fn;
 	            return this;
 	        },
 	        get: function(name) {
-	            return _helpers[name] || function(a) { return a; }
+	            var expression = new RegExp("\\" + name + "\\((.*?)\\)+", "gi");
+	            return function(text) {
+	                var _str = text,
+	                    _isObj = (typeof text === "object");
+
+	                if (_isObj) {
+	                    _str = text.text;
+	                }
+
+	                var _splt = _str.split(expression),
+	                    _match = _str.match(expression);
+	                /**
+	                 * force return if no match
+	                 */
+	                if (!_match) {
+	                    return text;
+	                }
+
+	                var _parser_ = {
+	                        $match: _match,
+	                        $split: _splt,
+	                        length: _splt.length,
+	                        inArray: function(str) {
+	                            return _match.some(function(key) { return key.indexOf(str) > -1 });
+	                        },
+	                        join: function(pattern) {
+	                            return this.$split.join(pattern);
+	                        },
+	                        index: function(index) {
+	                            return this.$split[index];
+	                        },
+	                        input: function() {
+	                            return _splt;
+	                        }
+	                    },
+	                    processed = (_helpers[name] || function() { return text; })(_parser_);
+
+	                _parser_ = null;
+
+	                if (_isObj) {
+	                    text.text = processed;
+
+	                    return text;
+	                }
+
+	                return processed;
+	            }
 	        },
 	        hasProcess: function(name) {
 	            return _processHelpers.hasOwnProperty(name);
@@ -132,9 +243,12 @@
 	        _processHelpers.table = function(item, helpers) {
 	            item.table.body.forEach(processBody(helpers));
 	        }
+
+	        return this;
 	    }
 
-	    this.buildHelpers();
+	    this.buildHelpers()
+	        .initializeDefaultHelpers();
 
 	    /**
 	     * 
@@ -200,13 +314,17 @@
 	     * Template Matcher
 	     */
 	    this.templateMatcher = {
-	        set: _matcher_.push,
+	        set: function(val) {
+	            _matcher_.push(val);
+	            return this;
+	        },
 	        remove: function(val) {
 	            _matcher_.splice(_matcher_.indexOf(val), 1);
 	            return this;
 	        },
 	        default: function(arr) {
 	            _matcher_ = arr;
+	            return this;
 	        },
 	        get: function() {
 	            return _matcher_;
@@ -781,36 +899,10 @@
              }
          };
 
-         /**
-          * set underline helper
-          */
-         pTemplateMaker.helpers.add('@underline', function(_str) {
-             var regex = /\@underline\((.*?)\)+/g,
-                 _arr = _str.split(regex),
-                 _match = _str.match(regex),
-                 nArr = new Array(_arr.length);
-             if (_arr.length === 1) {
-                 return _str
-             }
-
-             _arr.forEach(function(str, idx) {
-                 if (_match.some(function(key) { return key.indexOf(str) > -1 })) {
-                     str = ({
-                         text: str,
-                         decoration: 'underline'
-                     })
-                 }
-
-                 nArr[idx] = str
-             })
-
-             return nArr;
-         });
-
 
          pTemplateMaker
              .templateMatcher
-             .default(["content", "header", "footer", "defaultStyle", "images", "pageBreakBefore"]);
+             .default(["content", "header", "footer", "defaultStyle", "styles", "images", "pageBreakBefore"]);
          //pdfTemplateConfig goes here 
          pTemplateMaker
              .setMatchers(["text", "columns", "table", "stack", "ul", "ol", "layout"], true)
@@ -855,6 +947,24 @@
               */
              .setHandlers('defaultStyleHandler', function() {
                  return self.localization.resolveStyle();
+             })
+
+         /**
+          * resolve styles
+          * styles:{
+              content: <OBJECT> stylesDefinition,
+              handler: <STRING> OPTIONAL
+          }
+          */
+         .setHandlers('$stylesHandler', function(productData) {
+                 if (productData.styles && productData.styles) {
+                     var styles = productData.styles.content;
+                     if (productData.styles.handler && pTemplateMaker.hasHandlers(productData.styles.handler)) {
+                         styles = pTemplateMaker.handlers[productData.style.handler](styles || {});
+                     }
+                 }
+
+                 return pdfTemplateMaker.extend({}, styles || {});
              })
              /**
               * layout handler

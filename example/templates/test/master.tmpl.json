@@ -4,8 +4,8 @@
     "pageSize": "A4",
     "pageMargins": [20, 100, 20, 100],
     "content": [{
-            "text": "{{my.name}}",
-            "processHelpers": ["@underline"]
+            "text": "{{welcome.messaege}}",
+            "processHelpers": ["@underline", "@bold"]
         }, {
             "text": "textContents",
             "style": "header",
@@ -13,10 +13,6 @@
         },
         {
             "text": "textContents"
-        },
-        {
-            "text": ["Modify date dynamically with helpers ", "date ", { "text": "@date(2018-02-02)" }],
-            "processHelpers": ["@date"]
         },
         {
             "table": {
@@ -34,11 +30,10 @@
         },
         {
             "table": {
-                "widths": ["*"],
+                "widths": ["auto", "*"],
                 "body": ["tableContent"]
             },
-            "layout": "testLayout",
-            "processHelpers": ["@underline"]
+            "processHelpers": ["@underline", "@bold", "@italics", "@boldUnderline", "@boldItalics", "@boldItalicsUnderline", "@underlineItalics"]
         }
     ],
     "pageBreakBefore": "pageBreakHandler",

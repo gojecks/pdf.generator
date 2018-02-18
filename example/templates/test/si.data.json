@@ -8,28 +8,18 @@
     },
     "tableContent": {
         "content": [
-
             [
-                [{
-                    "text": "YES ITS WORKING!!"
-                }],
-                [
-                    "Underline text with @underline(@underline)(text to underline)"
-                ],
-                [{
-                    "table": {
-                        "body": [
-                            [{
-                                "stack": [
-                                    "stacked content in a nested @underline(table)"
-                                ]
-                            }]
-                        ]
-                    }
-                }]
+
+                [{ "text": "HelperName", "style": "alignmentAndBoldHeader" }, { "text": "Usuage", "style": "alignmentAndBoldHeader" }],
+                ["'@bold'", "@bold(Bold a text)"],
+                ["'@underline'", "@underline(underline) text within a sentence"],
+                ["'@italics'", "Make a text @italics(italics)"],
+                ["'@boldUnderline'", "@boldUnderline(Bold and Underline) text"],
+                ["'@boldItalics'", "@boldItalics(Bold and Italics) text"],
+                ["'@boldItalicsUnderline'", "@boldItalicsUnderline(Bold Italics and underline) text"],
+                ["'@underlineItalics'", "@underlineItalics(Underline and Italic) text"]
             ]
         ]
-
     },
     "header": {
         "text": "{{page.header}} @date(2018-04-09, 12452525)",
