@@ -34,12 +34,61 @@
 
 	    this.helpers = {
 	        add: function(name, fn) {
-	            _helpers[name] = fn;
+	            if (_helpers.hasOwnProperty(name)) {
+	                throw new Error('Duplicate Helper name(' + name + ')');
+	            }
 
+	            _helpers[name] = fn;
 	            return this;
 	        },
 	        get: function(name) {
-	            return _helpers[name] || function(a) { return a; }
+	            var expression = new RegExp("\\" + name + "\\((.*?)\\)+", "gi");
+	            return function(text) {
+	                var _str = text,
+	                    _isObj = (typeof text === "object");
+
+	                if (_isObj) {
+	                    _str = text.text;
+	                }
+
+	                var _splt = _str.split(expression),
+	                    _match = _str.match(expression);
+	                /**
+	                 * force return if no match
+	                 */
+	                if (!_match) {
+	                    return text;
+	                }
+
+	                var _parser_ = {
+	                        $match: _match,
+	                        $split: _splt,
+	                        length: _splt.length,
+	                        inArray: function(str) {
+	                            return _match.some(function(key) { return key.indexOf(str) > -1 });
+	                        },
+	                        join: function(pattern) {
+	                            return this.$split.join(pattern);
+	                        },
+	                        index: function(index) {
+	                            return this.$split[index];
+	                        },
+	                        input: function() {
+	                            return _splt;
+	                        }
+	                    },
+	                    processed = (_helpers[name] || function() { return text; })(_parser_);
+
+	                _parser_ = null;
+
+	                if (_isObj) {
+	                    text.text = processed;
+
+	                    return text;
+	                }
+
+	                return processed;
+	            }
 	        },
 	        hasProcess: function(name) {
 	            return _processHelpers.hasOwnProperty(name);
@@ -132,9 +181,12 @@
 	        _processHelpers.table = function(item, helpers) {
 	            item.table.body.forEach(processBody(helpers));
 	        }
+
+	        return this;
 	    }
 
-	    this.buildHelpers();
+	    this.buildHelpers()
+	        .initializeDefaultHelpers();
 
 	    /**
 	     * 
