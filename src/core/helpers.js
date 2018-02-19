@@ -34,6 +34,9 @@ pdfTemplateMaker.$$defaultHelpers = {
     "@underlineItalics": parserFn({
         decoration: "underline",
         italics: true
+    }),
+    "@now": parserFn(function() {
+        return new Date().toLocaleDateString();
     })
 };
 
@@ -46,7 +49,16 @@ function parserFn(definition) {
         var nArr = new Array(parser.length);
         parser.input().forEach(function(str, idx) {
             if (parser.inArray(str)) {
-                var _obj = JSON.parse(JSON.stringify(definition));
+                var _obj;
+                /**
+                 * check if definition was register with FUNCTION
+                 */
+                if (typeof definition === 'function') {
+                    _obj = definition(str, parser);
+                } else {
+                    _obj = JSON.parse(JSON.stringify(definition))
+                }
+
                 _obj.text = str;
                 str = _obj;
                 _obj = null;
@@ -58,3 +70,5 @@ function parserFn(definition) {
         return nArr;
     }
 }
+
+pdfTemplateMaker.$$coreParser = parserFn;
