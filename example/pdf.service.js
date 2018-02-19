@@ -63,7 +63,7 @@
         return {
             after: function(CB) {
                 if (CB) {
-                    _pdfService.pdfTemplateObj.events.subscribe('pdf.formular.queue.finish', function() {
+                    _pdfService.pdfTemplateObj.events.subscribe('pdf.generator.formular.queue.finish', function() {
                         CB();
                     });
                 };

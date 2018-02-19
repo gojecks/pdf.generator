@@ -14,7 +14,7 @@
        return {
            after: function(CB) {
                if (CB) {
-                   self.pdfTemplateObj.events.subscribe('modular.formular.queue.finish', function() {
+                   self.pdfTemplateObj.events.subscribe('pdf.generator.formular.queue.finish', function() {
                        CB();
                    });
                };

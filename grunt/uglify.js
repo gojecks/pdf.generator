@@ -39,7 +39,7 @@ module.exports = {
     },
     dist: {
         options: {
-            banner: '\n/**\n@license pdfGeneratorn\nAuthor : Gojecks Joseph\n' + license.join('') + '\nVersion 1.0.0\n**/\n\n',
+            banner: '\n/**\n@license pdf.generatorn\nAuthor : Gojecks Joseph\n' + license.join('') + '\nVersion 1.0.0\n**/\n\n',
             footer: ''
         },
         files: {

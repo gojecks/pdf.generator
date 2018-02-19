@@ -17,7 +17,8 @@
                 ["'@boldUnderline'", "@boldUnderline(Bold and Underline) text"],
                 ["'@boldItalics'", "@boldItalics(Bold and Italics) text"],
                 ["'@boldItalicsUnderline'", "@boldItalicsUnderline(Bold Italics and underline) text"],
-                ["'@underlineItalics'", "@underlineItalics(Underline and Italic) text"]
+                ["'@underlineItalics'", "@underlineItalics(Underline and Italic) text"],
+                ["'@now", "Prints current Date @now()"]
             ]
         ]
     },

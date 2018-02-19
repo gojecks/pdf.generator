@@ -1,58 +1,58 @@
 {
-  "name": "pdfgenerator",
-  "version": "1.0.0",
-  "description": "PDF Generator Plugin for generating PDF dynamically.",
-  "main": "dist/pdf.generator.min.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "grunt",
-    "prepublish": "grunt prepublish"
-  },
-  "keywords": [
-    "pdf-generator",
-    "pdfMake",
-    "generatePdf",
-    "javascript pdf"
-  ],
-  "files": [
-    "dist"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gojecks/pdf.generator.git"
-  },
-  "author": "Joseph Gojecks",
-  "license": "MIT",
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-bump-cordova": "^0.1.8",
-    "grunt-cli": "^0.1.13",
-    "grunt-concurrent": "1.0.0",
-    "grunt-connect-proxy": "^0.2.0",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-concat": "^0.1.3",
-    "grunt-contrib-copy": "^0.8.2",
-    "grunt-contrib-cssmin": "^0.6.1",
-    "grunt-contrib-jshint": "^0.11.3",
-    "grunt-contrib-less": "^1.0.0",
-    "grunt-contrib-uglify": "^2.0.0",
-    "grunt-contrib-watch": "^0.5.3",
-    "grunt-karma": "0.6.2",
-    "grunt-newer": "1.1.2",
-    "jit-grunt": "0.9.1",
-    "karma": "^1.4.0",
-    "karma-chai": "^0.1.0",
-    "karma-coverage": "^1.1.1",
-    "karma-coverage-istanbul-reporter": "^1.3.0",
-    "karma-mocha": "^1.3.0",
-    "karma-mocha-reporter": "^2.2.1",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "karma-remap-coverage": "^0.1.4",
-    "karma-sourcemap-loader": "^0.3.7",
-    "load-grunt-config": "0.16.0",
-    "load-grunt-tasks": "3.1.0",
-    "pdfmake": "^0.1.35",
-    "time-grunt": "1.3.0",
-    "yargs": "^6.6.0"
-  }
+    "name": "jpdf.generator",
+    "version": "1.0.0",
+    "description": "PDF Generator Plugin for generating PDF dynamically.",
+    "main": "dist/pdf.generator.min.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "grunt",
+        "prepublish": "grunt prepublish"
+    },
+    "keywords": [
+        "pdf-generator",
+        "pdfMake",
+        "generatePdf",
+        "javascript pdf"
+    ],
+    "files": [
+        "dist"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gojecks/pdf.generator.git"
+    },
+    "author": "Joseph Gojecks",
+    "license": "MIT",
+    "devDependencies": {
+        "grunt": "^0.4.5",
+        "grunt-bump-cordova": "^0.1.8",
+        "grunt-cli": "^0.1.13",
+        "grunt-concurrent": "1.0.0",
+        "grunt-connect-proxy": "^0.2.0",
+        "grunt-contrib-clean": "^0.6.0",
+        "grunt-contrib-concat": "^0.1.3",
+        "grunt-contrib-copy": "^0.8.2",
+        "grunt-contrib-cssmin": "^0.6.1",
+        "grunt-contrib-jshint": "^0.11.3",
+        "grunt-contrib-less": "^1.0.0",
+        "grunt-contrib-uglify": "^2.0.0",
+        "grunt-contrib-watch": "^0.5.3",
+        "grunt-karma": "0.6.2",
+        "grunt-newer": "1.1.2",
+        "jit-grunt": "0.9.1",
+        "karma": "^1.4.0",
+        "karma-chai": "^0.1.0",
+        "karma-coverage": "^1.1.1",
+        "karma-coverage-istanbul-reporter": "^1.3.0",
+        "karma-mocha": "^1.3.0",
+        "karma-mocha-reporter": "^2.2.1",
+        "karma-phantomjs-launcher": "^1.0.2",
+        "karma-remap-coverage": "^0.1.4",
+        "karma-sourcemap-loader": "^0.3.7",
+        "load-grunt-config": "0.16.0",
+        "load-grunt-tasks": "3.1.0",
+        "pdfmake": "^0.1.35",
+        "time-grunt": "1.3.0",
+        "yargs": "^6.6.0"
+    }
 }

@@ -33,7 +33,7 @@
                 "widths": ["auto", "*"],
                 "body": ["tableContent"]
             },
-            "processHelpers": ["@underline", "@bold", "@italics", "@boldUnderline", "@boldItalics", "@boldItalicsUnderline", "@underlineItalics"]
+            "processHelpers": ["@underline", "@bold", "@italics", "@boldUnderline", "@boldItalics", "@boldItalicsUnderline", "@underlineItalics", "@now"]
         },
         "br",
         {
