@@ -131,6 +131,10 @@
              return this;
          };
 
+         this.getModelDictionary = function() {
+             return model.replacerData;
+         };
+
          //add externalModule to call
          this.externalModules = {
              set: function(moduleName, fn) {
