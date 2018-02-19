@@ -34,6 +34,15 @@
                 "body": ["tableContent"]
             },
             "processHelpers": ["@underline", "@bold", "@italics", "@boldUnderline", "@boldItalics", "@boldItalicsUnderline", "@underlineItalics"]
+        },
+        "br",
+        {
+            "text": "Create and Modify content using handler",
+            "fontSize": 21
+        },
+        {
+            "stack": "stackContent",
+            "hasLogic": "$stackHandler"
         }
     ],
     "pageBreakBefore": "pageBreakHandler",

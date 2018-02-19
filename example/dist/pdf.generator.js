@@ -34,6 +34,9 @@ pdfTemplateMaker.$$defaultHelpers = {
     "@underlineItalics": parserFn({
         decoration: "underline",
         italics: true
+    }),
+    "@now": parserFn(function() {
+        return new Date().toLocaleDateString();
     })
 };
 
@@ -46,7 +49,16 @@ function parserFn(definition) {
         var nArr = new Array(parser.length);
         parser.input().forEach(function(str, idx) {
             if (parser.inArray(str)) {
-                var _obj = JSON.parse(JSON.stringify(definition));
+                var _obj;
+                /**
+                 * check if definition was register with FUNCTION
+                 */
+                if (typeof definition === 'function') {
+                    _obj = definition(str, parser);
+                } else {
+                    _obj = JSON.parse(JSON.stringify(definition))
+                }
+
                 _obj.text = str;
                 str = _obj;
                 _obj = null;
@@ -58,6 +70,8 @@ function parserFn(definition) {
         return nArr;
     }
 }
+
+pdfTemplateMaker.$$coreParser = parserFn;
 
 
 	/**
@@ -122,6 +136,17 @@ function parserFn(definition) {
 	                    return text;
 	                }
 
+	                /**
+	                 * @parser definition
+	                 * 	- $match : <ARRAY>
+	                 *  - $split : <ARRAY>
+	                 *  - length : <Number>
+	                 *  - inArray : <FUNCTION>
+	                 *  - join : <FUNCTION>
+	                 *  - index : <FUNCTION>
+	                 *  - input : <FUNCTION>
+	                 *  - $defult : <FUNCTION>
+	                 */
 	                var _parser_ = {
 	                        $match: _match,
 	                        $split: _splt,
@@ -137,6 +162,9 @@ function parserFn(definition) {
 	                        },
 	                        input: function() {
 	                            return _splt;
+	                        },
+	                        $default: function() {
+	                            return text;
 	                        }
 	                    },
 	                    processed = (_helpers[name] || function() { return text; })(_parser_);
@@ -405,7 +433,7 @@ function parserFn(definition) {
 		productTemplate : OBJECT (reference to master Template)
 		Object toEvaluate : ARRAY (List of types to evaluate)
 		replacerData: OBJECT (Data to replace our placeholder)
-		templateName:  Name of current template been compiled
+		templateName:  Name of current template been evaluated
 	*/
 
 	pdfTemplateMaker.prototype.beginDataEvaluation = function(productData, productTemplate, replacerData, templateName) {
@@ -436,11 +464,9 @@ function parserFn(definition) {
 	    	argument
 	    	prop, productData,productTemplate[type],replacerData
 	    */
-	    function checkForLogicBeforeProcess(prop, productData) {
-	        if (productData[prop] && productData[prop].hasLogic) {
-	            if (self.hasHandlers(productData[prop].hasLogic)) {
-	                self.getHandler(productData[prop].hasLogic)(prop, productData);
-	            }
+	    function checkForLogicBeforeProcess(logic, _item) {
+	        if (self.hasHandlers(logic)) {
+	            self.getHandler(logic)(_item);
 	        }
 	    }
 
@@ -456,7 +482,11 @@ function parserFn(definition) {
 	            if (typeof productTemplate[type][prop] === "string" && ["pagebreak", "br"].indexOf(productTemplate[type][prop].toLowerCase()) > -1) {
 	                productTemplate[type][prop] = { text: "", "pageBreak": "after" };
 	            }
-	            checkForLogicBeforeProcess(prop, productTemplate[type]);
+
+	            if (type === 'content' && productTemplate[type][prop].hasLogic) {
+	                checkForLogicBeforeProcess(productTemplate[type][prop].hasLogic, productTemplate[type][prop]);
+	                delete productTemplate[type][prop].hasLogic;
+	            }
 	        }
 	    }
 
@@ -470,8 +500,6 @@ function parserFn(definition) {
 	                productTemplate[type] = self.parser(productData, productData[type], replacerData)
 	            }
 	        }
-
-	        checkForLogicBeforeProcess(type, productData);
 	    }
 
 	    this.events.broadcast('evaluation.done', [productTemplate, templateName]);
@@ -887,6 +915,10 @@ function parserFn(definition) {
          this.convertModelToDictionary = function() {
              model.replacerData = profile(model.replacerData);
              return this;
+         };
+
+         this.getModelDictionary = function() {
+             return model.replacerData;
          };
 
          //add externalModule to call

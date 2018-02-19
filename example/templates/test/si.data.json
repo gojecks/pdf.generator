@@ -21,6 +21,14 @@
             ]
         ]
     },
+    "stackContent": {
+        "content": [
+            [{
+                "text": "Hello World"
+            }]
+        ]
+
+    },
     "header": {
         "text": "{{page.header}} @date(2018-04-09, 12452525)",
         "color": "gray",

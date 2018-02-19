@@ -47,6 +47,10 @@
                     content[0][0][0].text = pdf.core.helpers.get('underline')(content[0][0][0].text);
                     return content[0];
                 })
+                .handlers('$stackHandler', function(content) {
+                    content.stack[0].text = "Hello world i was modified from an Handler";
+                    return content;
+                })
                 .onError('TemplateError', function(err) {
                     pdfService.service.pdfTemplateObj.events.broadcast('skip.template');
                 });
