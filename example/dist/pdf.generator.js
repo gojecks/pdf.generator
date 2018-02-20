@@ -37,6 +37,15 @@ pdfTemplateMaker.$$defaultHelpers = {
     }),
     "@now": parserFn(function() {
         return new Date().toLocaleDateString();
+    }),
+    "@capitalize": parserFn(function(text) {
+        return text.charAt(0).toUpperCase() + text.toLowerCase().slice(1);
+    }),
+    "@uppercase": parserFn(function(text) {
+        return text.toUpperCase();
+    }),
+    "@lowercase": parserFn(function(text) {
+        return text.toLowerCase();
     })
 };
 
@@ -715,7 +724,7 @@ pdfTemplateMaker.$$coreParser = parserFn;
        return {
            after: function(CB) {
                if (CB) {
-                   self.pdfTemplateObj.events.subscribe('modular.formular.queue.finish', function() {
+                   self.pdfTemplateObj.events.subscribe('pdf.generator.formular.queue.finish', function() {
                        CB();
                    });
                };
@@ -782,6 +791,30 @@ pdfTemplateMaker.$$coreParser = parserFn;
 	        _pdf.getDataUrl.apply(_pdf, arg);
 	    });
 	};
+
+
+/**
+ * Facade to connect to corePdfMaker helper
+ */
+pdfTemplateMakerService.helpers = {
+    $default: function(helperName, definition) {
+        pdfTemplateMaker.$$defaultHelpers[helperName] = pdfTemplateMaker.$$coreParser(definition);
+    },
+    $get: function(helperName) {
+        if (helperName && pdfTemplateMaker.$$defaultHelpers[helperName]) {
+            return pdfTemplateMaker.$$defaultHelpers[helperName]
+        }
+
+        return pdfTemplateMaker.$$defaultHelpers;
+    },
+    $remove: function(helperName) {
+        delete pdfTemplateMaker.$$defaultHelpers[helperName];
+    },
+    isExists: function(helperName) {
+        return pdfTemplateMaker.$$defaultHelpers.hasOwnProperty(helperName);
+    },
+    $parser: pdfTemplateMaker.$$coreParser
+};
 
 
      //Javascript service that connects to the pdfTemplateMaker
@@ -918,7 +951,21 @@ pdfTemplateMaker.$$coreParser = parserFn;
          };
 
          this.getModelDictionary = function() {
-             return model.replacerData;
+             return {
+                 get: function(key) {
+                     return model.replacerData[key]
+                 },
+                 set: function(name, value) {
+                     if (typeof value === "object") {
+                         throw error("cannot set object into the dictionary");
+                     }
+
+                     model.replacerData[name] = value;
+                 },
+                 $$: function() {
+                     return model.replacerData
+                 }
+             };
          };
 
          //add externalModule to call
