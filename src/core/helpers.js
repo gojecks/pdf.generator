@@ -37,6 +37,15 @@ pdfTemplateMaker.$$defaultHelpers = {
     }),
     "@now": parserFn(function() {
         return new Date().toLocaleDateString();
+    }),
+    "@capitalize": parserFn(function(text) {
+        return text.charAt(0).toUpperCase() + text.toLowerCase().slice(1);
+    }),
+    "@uppercase": parserFn(function(text) {
+        return text.toUpperCase();
+    }),
+    "@lowercase": parserFn(function(text) {
+        return text.toLowerCase();
     })
 };
 
