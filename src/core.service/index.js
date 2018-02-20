@@ -132,7 +132,21 @@
          };
 
          this.getModelDictionary = function() {
-             return model.replacerData;
+             return {
+                 get: function(key) {
+                     return model.replacerData[key]
+                 },
+                 set: function(name, value) {
+                     if (typeof value === "object") {
+                         throw error("cannot set object into the dictionary");
+                     }
+
+                     model.replacerData[name] = value;
+                 },
+                 $$: function() {
+                     return model.replacerData
+                 }
+             };
          };
 
          //add externalModule to call
